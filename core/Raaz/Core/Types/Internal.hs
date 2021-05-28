@@ -25,6 +25,7 @@
 
 module Raaz.Core.Types.Internal
        ( module Raaz.Core.Primitive
+       , module Raaz.Core.Types.Curve25519
        , module Raaz.Core.Types.Endian
        , module Raaz.Core.Types.Pointer
        , module Raaz.Core.Types.Copying
@@ -38,3 +39,4 @@ import Raaz.Core.Types.Pointer ( AlignedPtr (..)
                                )
 import Raaz.Core.Types.Copying ( Src(..), Dest(..)       )
 import Raaz.Core.Types.Tuple
+import Raaz.Core.Types.Curve25519( Elem(..), Scalar(..)  )

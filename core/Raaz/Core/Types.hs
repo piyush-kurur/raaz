@@ -17,7 +17,6 @@ module Raaz.Core.Types
        , module Raaz.Core.Types.Pointer
        , module Raaz.Core.Types.Tuple
        , module Raaz.Core.Types.Copying
-       , module Raaz.Core.Types.Curve25519
        ) where
 
 import Raaz.Core.Types.Equality
@@ -33,7 +32,6 @@ import Raaz.Core.Types.Pointer hiding ( AlignedPtr, BYTES)
 import Raaz.Core.Types.Pointer        ( AlignedPtr, BYTES)
 import Raaz.Core.Types.Tuple   hiding ( map                     )
 import Raaz.Core.Types.Copying( Src, Dest, source, destination)
-import Raaz.Core.Types.Curve25519( Elem, Scalar)
 
 -- $overview$
 --

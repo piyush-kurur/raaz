@@ -204,7 +204,7 @@ common defaults
 ----------------------------- The core library ------------------------------------------------
 library core
   import: defaults
-  -- visibility: public
+  visibility: public
   hs-source-dirs: core
   exposed-modules: Raaz.Core
                  , Raaz.Core.CpuSupports
@@ -215,7 +215,7 @@ library core
                  , Raaz.Core.Transfer.Unsafe
                  , Raaz.Core.Types
                  , Raaz.Core.Types.Internal
-                 , Raaz.Core.Types.Curve25519
+                 , Raaz.Curve25519.Internal
                  , Raaz.Primitive.AEAD.Internal
                  , Raaz.Primitive.Blake2.Internal
                  , Raaz.Primitive.Sha2.Internal

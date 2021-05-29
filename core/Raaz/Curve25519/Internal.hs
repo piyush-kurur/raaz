@@ -2,14 +2,14 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 -- |
 --
--- Module      : Raaz.Core.Types.Curve25519
+-- Module      : Raaz.Curve25519.Internal
 -- Copyright   : (c) Piyush P Kurur, 2019
 -- License     : Apache-2.0 OR BSD-3-Clause
 -- Maintainer  : Piyush P Kurur <ppk@iitpkd.ac.in>
 -- Stability   : experimental
 --
 
-module Raaz.Core.Types.Curve25519
+module Raaz.Curve25519.Internal
   ( -- * Curve25519 Types
     Elem(..), Scalar(..)
     -- ** Parameters

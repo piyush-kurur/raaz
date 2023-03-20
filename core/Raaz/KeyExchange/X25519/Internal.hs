@@ -5,6 +5,10 @@
 {-# LANGUAGE TypeFamilies                #-}
 module Raaz.KeyExchange.X25519.Internal
        ( X25519(..)
+       , Private(..)
+       , Exchange(..)
+       , Secret(..)
+       , Word256
        ) where
 
 import Foreign.Storable

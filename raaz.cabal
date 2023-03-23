@@ -722,6 +722,8 @@ test-suite tests
                , Raaz.RandomSpec
                , Raaz.Cipher.ChaCha20Spec
                , Raaz.Cipher.XChaCha20Spec
+               , Raaz.KeyExchange.X25519Spec
+               , Raaz.Curve25519.Field
                , Raaz.Digest.Sha256Spec
                , Raaz.Digest.Sha512Spec
                , Raaz.Digest.Blake2Spec

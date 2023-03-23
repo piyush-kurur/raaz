@@ -9,6 +9,8 @@ module Tests.Core.Instances () where
 import Tests.Core.Imports
 
 import Raaz.Primitive.Poly1305.Internal as Poly1305
+import Raaz.KeyExchange.X25519.Internal as X25519
+
 import Raaz.Core.Types.Internal
 import Raaz.Primitive.Keyed.Internal as Keyed
 
@@ -87,6 +89,17 @@ instance Arbitrary Poly1305.Poly1305 where
 
 instance Arbitrary (Key Poly1305) where
   arbitrary = Poly1305.Key <$> arbitrary <*> arbitrary
+
+---------------- Arbitrary instances for  X25519 ------------------
+
+instance Arbitrary (Private X25519) where
+  arbitrary = genEncodable
+
+instance Arbitrary (Exchange X25519) where
+  arbitrary = genEncodable
+
+instance Arbitrary (Secret X25519) where
+  arbitrary = genEncodable
 
 genEncodable :: (Encodable a, Storable a) => Gen a
 genEncodable = go undefined

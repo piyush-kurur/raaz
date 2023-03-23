@@ -392,3 +392,5 @@ instance Random w => Random (BE w) where
 
 instance (Dimension d, Unbox w, Random w) => Random (Tuple d w) where
   random state = generateIO (random state)
+
+instance Random (Private X25519)

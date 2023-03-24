@@ -44,10 +44,13 @@ instance Memory Mem where
 instance Initialisable Mem (Private X25519) where
   initialise prv mem = initialise prv (privateCell mem) >> clamp mem
 
-
 -- | Extracts own xchange data
 instance Extractable Mem (Exchange X25519) where
     extract = extract . ownXCell
+
+-- | Extract shared secret.
+instance Extractable Mem (Secret X25519) where
+  extract = extract . secretCell
 
 -- | Write access is given to the private key cell.
 instance WriteAccessible Mem where

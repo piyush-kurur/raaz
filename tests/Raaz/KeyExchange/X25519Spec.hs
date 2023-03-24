@@ -38,3 +38,9 @@ isClamped (Private w) = check (word256ToInteger w)
                       ]
         isCleared n x = testBit (complementBit x n) n
         isSet = flip testBit
+
+-------------------------------------------------------------------------------
+--    X25519 using the Integer Type
+--
+-- WARNING: only to be used for testing, it is slow and unsafe.
+--

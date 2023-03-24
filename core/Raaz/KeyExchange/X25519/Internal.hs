@@ -8,7 +8,9 @@ module Raaz.KeyExchange.X25519.Internal
        , Private(..)
        , Exchange(..)
        , Secret(..)
-       , Word256
+       , W256
+       , W
+       , B32
        ) where
 
 import Foreign.Storable
@@ -17,17 +19,19 @@ import Raaz.Core.KeyExchange ()
 
 data X25519 = X25519
 
-type Word256 = Tuple 4 (LE Word64)
+type W    = Word64
+type W256 = Tuple 4 W
+type B32  = Tuple 4 (LE W)
 
 instance KeyExchange X25519 where
 
-  newtype Private X25519 = Private Word256
+  newtype Private X25519 = Private B32
     deriving (Storable, EndianStore, Equality, Eq)
 
-  newtype Exchange X25519 = Exchange Word256
+  newtype Exchange X25519 = Exchange B32
     deriving (Storable, EndianStore, Equality, Eq)
 
-  newtype Secret X25519 = Secret Word256
+  newtype Secret X25519 = Secret B32
     deriving (Storable, EndianStore, Equality, Eq)
 
 

@@ -35,8 +35,8 @@ scalarMul :: (Mem -> MemoryCell (Exchange X25519))
 scalarMul cellFn point mem =
   do initialise point (cellFn mem)
      let scalarPtr = privatePtr mem
-         pointPtr  = word256PtrOf cellFn mem
-       in verse_x25519_c_portable scalarPtr pointPtr
+         pointPtr  = w256PtrOf cellFn mem
+        in verse_x25519_c_portable scalarPtr pointPtr
 
 
 setOwnExchange :: Internals -> IO ()

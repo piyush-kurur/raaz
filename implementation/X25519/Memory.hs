@@ -6,7 +6,7 @@
 module X25519.Memory
        ( Mem(..)
        , privatePtr
-       , word256PtrOf
+       , w256PtrOf
        ) where
 
 import Foreign.Ptr (castPtr)
@@ -16,21 +16,22 @@ import Raaz.KeyExchange.X25519.Internal
 
 import Raaz.Verse.Curve25519.C.Portable ( verse_curve25519_c_portable_clamp )
 
+
 -- | Memory cell for
 data Mem = Mem { privateCell :: MemoryCell (Private X25519)
                , ownXCell    :: MemoryCell (Exchange X25519)
                , peerXCell   :: MemoryCell (Exchange X25519)
-               , secretCell      :: MemoryCell (Secret X25519)
+               , secretCell  :: MemoryCell (Secret X25519)
                }
 
-word256PtrOf :: Storable a
+w256PtrOf :: Storable a
              => (Mem -> MemoryCell a)
              -> Mem
-             -> Ptr Word256
-word256PtrOf cellFn  = castPtr . unsafeGetCellPointer . cellFn
+             -> Ptr W256
+w256PtrOf cellFn  =  castPtr . unsafeGetCellPointer . cellFn
 
-privatePtr :: Mem -> Ptr Word256
-privatePtr = word256PtrOf privateCell
+privatePtr :: Mem -> Ptr W256
+privatePtr = w256PtrOf privateCell
 
 
 clamp :: Mem -> IO ()

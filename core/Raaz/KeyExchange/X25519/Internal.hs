@@ -42,8 +42,17 @@ instance Encodable (Secret X25519)
 instance Show (Private X25519) where
   show = showBase16
 
+instance IsString (Private X25519) where
+  fromString = fromBase16
+
 instance Show (Exchange X25519) where
   show = showBase16
 
+instance IsString (Exchange X25519) where
+  fromString = fromBase16
+
 instance Show (Secret X25519) where
   show = showBase16
+
+instance IsString (Secret X25519) where
+  fromString = fromBase16

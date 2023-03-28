@@ -11,10 +11,10 @@ module Raaz.Curve25519.Field ( GF
                              , inverse
                              ) where
 
+import Tests.Core
 import qualified Data.Vector.Unboxed as VU
 import qualified Data.List  as List
-import Raaz.Core.Types.Internal
-import Raaz.Core
+
 import Raaz.KeyExchange.X25519.Internal
 
 b64 :: Integer
@@ -60,6 +60,9 @@ instance Num GF where
   abs = uniop abs
   signum  = uniop signum
   fromInteger = normalise . GF
+
+instance Arbitrary GF where
+  arbitrary = fromInteger <$> arbitrary
 
 -- | Computing generic powering using repeated squaring.
 powGen :: (a -> a -> a)

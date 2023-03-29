@@ -4,9 +4,10 @@
 module X25519.CPortable
        ( name, primName, description
        , Prim, Internals
-       , setOwnExchange, setSharedSecret
+       , setPublic, setSecret
        ) where
 
+import Foreign.Storable (Storable)
 import Raaz.Core
 import X25519.Memory
 import Raaz.KeyExchange.X25519.Internal
@@ -28,8 +29,9 @@ type Internals               = Mem
 generator :: Exchange X25519
 generator = Exchange $ unsafeFromList [0x09, 0 , 0 , 0]
 
-scalarMul :: (Mem -> MemoryCell (Exchange X25519))
-          -> Exchange X25519
+scalarMul :: Storable point
+          => (Mem -> MemoryCell point)
+          -> point
           -> Internals
           -> IO ()
 scalarMul cellFn point mem =
@@ -38,11 +40,10 @@ scalarMul cellFn point mem =
          pointPtr  = w256PtrOf cellFn mem
         in verse_x25519_c_portable scalarPtr pointPtr
 
+setPublic :: Internals -> IO ()
+setPublic = scalarMul publicCell generator
 
-setOwnExchange :: Internals -> IO ()
-setOwnExchange = scalarMul ownXCell generator
-
-setSharedSecret :: Exchange Prim -- ^ Exchange data from the peer
-                -> Internals
-                -> IO ()
-setSharedSecret = scalarMul peerXCell
+setSecret :: Exchange Prim -- ^ Exchange data from the peer
+          -> Internals
+          -> IO ()
+setSecret (Exchange x) = scalarMul secretCell $ Secret x

@@ -19,9 +19,8 @@ import Raaz.Verse.Curve25519.C.Portable ( verse_curve25519_c_portable_clamp )
 
 -- | Memory cell for
 data Mem = Mem { privateCell :: MemoryCell (Private X25519)
-               , ownXCell    :: MemoryCell (Exchange X25519)
-               , peerXCell   :: MemoryCell (Exchange X25519)
-               , secretCell  :: MemoryCell (Secret X25519)
+               , publicCell :: MemoryCell (Exchange X25519)
+               , secretCell :: MemoryCell (Secret X25519)
                }
 
 w256PtrOf :: Storable a
@@ -33,12 +32,11 @@ w256PtrOf cellFn  =  castPtr . unsafeGetCellPointer . cellFn
 privatePtr :: Mem -> Ptr W256
 privatePtr = w256PtrOf privateCell
 
-
 clamp :: Mem -> IO ()
 clamp mem = verse_curve25519_c_portable_clamp (privatePtr mem) 1
 
 instance Memory Mem where
-  memoryAlloc     = Mem <$> memoryAlloc <*> memoryAlloc <*> memoryAlloc <*> memoryAlloc
+  memoryAlloc     = Mem <$> memoryAlloc <*> memoryAlloc <*> memoryAlloc
   unsafeToPointer = unsafeToPointer . privateCell
 
 -- | Initialise private key.
@@ -47,7 +45,7 @@ instance Initialisable Mem (Private X25519) where
 
 -- | Extracts own xchange data
 instance Extractable Mem (Exchange X25519) where
-    extract = extract . ownXCell
+    extract = extract . publicCell
 
 -- | Extract shared secret.
 instance Extractable Mem (Secret X25519) where

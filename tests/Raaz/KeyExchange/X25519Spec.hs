@@ -17,13 +17,13 @@ value action = unsafePerformIO $ withMemory action
 public :: Private X25519 -> Exchange X25519
 public key = value $ \ mem -> do
   initialise key mem
-  setOwnExchange mem
+  setPublic mem
   extract mem
 
 secret :: Private X25519 -> Exchange X25519 -> Secret X25519
 secret key x = value $ \ mem -> do
   initialise key mem
-  setSharedSecret x mem
+  setSecret x mem
   extract mem
 
 

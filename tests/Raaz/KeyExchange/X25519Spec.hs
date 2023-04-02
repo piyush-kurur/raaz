@@ -212,7 +212,7 @@ smult :: Integer -> GF -> GF
 smult n = affine . fst . montgomery n
 
 x25519 :: Private X25519 -> Exchange X25519 -> Exchange X25519
-x25519 (Private prv256) (Exchange x256) = Exchange $ toWord256 $ smult n xB
+x25519 (Private prv256) (Exchange x256) = Exchange $ toBits256 $ smult n xB
   where n     = clamp       $ word256ToInteger prv256
         xB    = fromInteger $ word256ToInteger x256
 
@@ -220,7 +220,7 @@ x25519 (Private prv256) (Exchange x256) = Exchange $ toWord256 $ smult n xB
 
 publicRef :: Private X25519 -> Exchange X25519
 publicRef pv = x25519 pv base
-  where base = Exchange $ toWord256 $ 9
+  where base = Exchange $ toBits256 $ 9
 
 secretRef :: Private X25519 -> Exchange X25519 -> Secret X25519
 secretRef pv ex = case x25519 pv ex of

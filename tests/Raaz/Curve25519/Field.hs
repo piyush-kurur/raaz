@@ -5,7 +5,7 @@
 
 module Raaz.Curve25519.Field ( GF
                              , normalise
-                             , toWord256
+                             , toBits256
                              , word256ToInteger
                              , powGen
                              , inverse
@@ -37,15 +37,17 @@ word256ToInteger w256 = sum $ List.zipWith (*) ws [1, b64, b64_2, b64_3]
   where ws = List.map toInteger $ VU.toList $ unsafeToVector w256
 
 -- | We should be comparing the bitwise representation.
-toWord256 :: GF -> B32
-toWord256 (GF x) = unsafeFromList [ fromInteger x
+toBits256 :: (Num a, VU.Unbox a) => GF -> Tuple 4 a
+toBits256 (GF x) = unsafeFromList [ fromInteger x
                                   , fromInteger (x `div` b64)
                                   , fromInteger (x `div` b64_2)
                                   , fromInteger (x `div` b64_3)
                                   ]
 
 normalise :: GF -> GF
-normalise (GF x) = GF (x `mod` prime)
+normalise (GF x) | xp < 0 = GF (prime - xp)
+                 | otherwise = GF xp
+  where xp = x `mod` prime
 
 binop :: (Integer -> Integer -> Integer) -> GF -> GF -> GF
 binop f (GF x) (GF y) = normalise $ GF $ f x y

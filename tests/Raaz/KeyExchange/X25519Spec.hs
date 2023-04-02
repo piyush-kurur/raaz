@@ -72,8 +72,33 @@ spec = do
     prop "same shared secret for key pair" $ \ kA kB ->
       secretRef kA (publicRef kB) `shouldBe` secretRef kB (publicRef kA)
 
+  describe "unit tests for ref implementation" $
     let publicKeyOf = checkPublic publicRef
         sharedKeyOf = checkShared publicRef secretRef
+      in do publicKeyOf
+              "a8abababababababababababababababababababababababababababababab6b"
+              "e3712d851a0e5d79b831c5e34ab22b41a198171de209b8b8faca23a11c624859"
+
+            publicKeyOf
+              "c8cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd4d"
+              "b5bea823d9c9ff576091c54b7c596c0ae296884f0e150290e88455d7fba6126f"
+
+            publicKeyOf
+              "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a"
+              "8520f0098930a754748b7ddcb43ef75a0dbf3a0d26381af4eba4a98eaa9b4e6a"
+
+            publicKeyOf
+              "5dab087e624a8a4b79e17f8b83800ee66f3bb1292618b6fd1c2f8b27ff88e0eb"
+              "de9edb7d7b7dc1b4d35b61c2ece435373f8343c85b78674dadfc7e146f882b4f"
+
+            sharedKeyOf
+              "77076d0a7318a57d3c16c17251b26645df4c2f87ebc0992ab177fba51db92c2a"
+              "5dab087e624a8a4b79e17f8b83800ee66f3bb1292618b6fd1c2f8b27ff88e0eb"
+              "4a5d9d5ba4ce2de1728e3bf480350f25e07e21c947d19e3376f09b3c1e161742"
+
+  describe "unit tests" $
+    let publicKeyOf = checkPublic public
+        sharedKeyOf = checkShared public secret
       in do publicKeyOf
               "a8abababababababababababababababababababababababababababababab6b"
               "e3712d851a0e5d79b831c5e34ab22b41a198171de209b8b8faca23a11c624859"

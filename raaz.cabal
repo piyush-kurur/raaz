@@ -711,6 +711,7 @@ test-suite tests
                , test-auth-implementation
                , implementation
                , xchacha-indef
+               , libverse
                , raaz
   build-tool-depends: hspec-discover:hspec-discover
   if !os(windows)
@@ -726,6 +727,7 @@ test-suite tests
                , Raaz.Cipher.XChaCha20Spec
                , Raaz.KeyExchange.X25519Spec
                , Raaz.Curve25519.Field
+               , Raaz.Curve25519.FieldSpec
                , Raaz.Digest.Sha256Spec
                , Raaz.Digest.Sha512Spec
                , Raaz.Digest.Blake2Spec

@@ -9,6 +9,7 @@ module Raaz.Curve25519.Field ( GF
                              , word256ToInteger
                              , powGen
                              , inverse
+                             , unsafeToInteger
                              ) where
 
 import Tests.Core
@@ -83,3 +84,6 @@ powGen mult sq unit a n | n < 0     = error "powGen negative number"
 -- | Computing the multiplicative inverse in GF.
 inverse :: GF -> GF
 inverse x = powGen (*) (\ y -> y * y) (1 :: GF) x (prime - 2)
+
+
+unsafeToInteger (GF x) = x

@@ -59,6 +59,9 @@ allOnes = complement 0
 maxLimb :: Int -> Word64
 maxLimb i = allOnes `shiftR` (64 - len i)
 
+maxLs   :: Limbs
+maxLs = unsafeFromList (List.replicate 10 (allOnes `shiftR` 1))
+
 maxLimbs :: Limbs
 maxLimbs = unsafeFromList [ maxLimb i | i <- [0..9] ]
 
@@ -136,6 +139,9 @@ spec = do
         limbsToGF (propagate ls) `shouldBe` limbsToGF ls
 
   describe "reduce" $ do
+    it "will give a field element for almost all 1's" $
+      limbsToInteger (reduce maxLs) `shouldBe` unsafeToInteger (limbsToGF maxLs)
+
     it "will give a field element for maxLimb" $
       limbsToInteger (reduce maxLimbs) `shouldBe` unsafeToInteger (limbsToGF maxLimbs)
 
@@ -144,6 +150,9 @@ spec = do
 
     prop "should give reduced values for all limbs" $ \ lmbs ->
       limbsToInteger (reduce lmbs) `shouldBe` unsafeToInteger (limbsToGF lmbs)
+
+    prop "should return elements smaller than 2²⁵⁵ - 19" $ \lmbs ->
+      limbsToInteger (reduce lmbs) < 2^(255::Int) - 19
 
   describe "field arithmetic" $ do
     prop "addition" $ \ b c -> addition b c `shouldBe` (b + c)

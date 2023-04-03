@@ -29,12 +29,19 @@ type Limbs = Tuple 10 Word64
 clearTopBit :: Limbs -> Limbs
 clearTopBit = TI.map (flip clearBit 63)
 
-propagate :: Limbs -> Limbs
-propagate lmbs = unsafePerformIO doit
+limbTransform :: (Ptr Limbs -> IO ()) -> Limbs -> Limbs
+limbTransform action lmbs = unsafePerformIO doit
   where doit = allocaBuffer (sizeOf $ pure lmbs) $ runStoreLoad lmbs
         runStoreLoad ls ptr = do poke ptr ls
-                                 verse_gf25519_propagate ptr
+                                 action ptr
                                  peek ptr
+
+propagate :: Limbs -> Limbs
+propagate = limbTransform verse_gf25519_propagate
+
+reduce :: Limbs -> Limbs
+reduce  = limbTransform verse_gf25519_reduce
+
 
 type Packed = W256
 
@@ -42,10 +49,26 @@ pos :: Int -> Int
 pos n = 51 * q + 26 * r
   where (q,r) = n `quotRem` 2
 
+len :: Int -> Int
+len n = pos (n+1) - pos n
+
+
+allOnes :: Word64
+allOnes = complement 0
+
+maxLimb :: Int -> Word64
+maxLimb i = allOnes `shiftR` (64 - len i)
+
+maxLimbs :: Limbs
+maxLimbs = unsafeFromList [ maxLimb i | i <- [0..9] ]
+
+maxLimbsP :: Limbs
+maxLimbsP = unsafeFromList $ [ maxLimb i | i <- [0..8] ] List.++ [oneA]
+  where oneA = allOnes `shiftR` (64 - len 9 - 1)
+
 limbsToInteger :: Limbs -> Integer
 limbsToInteger lmb = sum [ w i | i <- [0..9] ]
   where w i   = toInteger (unsafeToVector lmb ! i) * 2^(pos i)
-
 
 limbsToGF :: Limbs -> GF
 limbsToGF = fromInteger . limbsToInteger
@@ -102,15 +125,25 @@ spec = do
     prop "load followed by store should give the same value" $
       \ gf -> storeLoadLimb gf `shouldReturn` gf
 
-  describe "auxiliary operations" $ do
-    it "propagation for limbs will all but top bit being one " $
+  describe "propagate" $ do
+    it "will given the same element for limbs with all but top bit being one " $
       let ones = clearBit (complement (0 :: Word64)) 63
           onesTup = unsafeFromList (List.replicate 10 ones) in
         limbsToGF (propagate onesTup) `shouldBe` limbsToGF onesTup
 
-    prop "propagate should not change the field element" $ \ lmbs ->
+    prop "should not change the field element" $ \ lmbs ->
       let ls = clearTopBit lmbs in
         limbsToGF (propagate ls) `shouldBe` limbsToGF ls
+
+  describe "reduce" $ do
+    it "will give a field element for maxLimb" $
+      limbsToInteger (reduce maxLimbs) `shouldBe` unsafeToInteger (limbsToGF maxLimbs)
+
+    it "will give the same field element for maxLimbs Plus additional bit" $
+      limbsToInteger (reduce maxLimbsP)  `shouldBe` unsafeToInteger (limbsToGF maxLimbsP)
+
+    prop "should give reduced values for all limbs" $ \ lmbs ->
+      limbsToInteger (reduce lmbs) `shouldBe` unsafeToInteger (limbsToGF lmbs)
 
   describe "field arithmetic" $ do
     prop "addition" $ \ b c -> addition b c `shouldBe` (b + c)

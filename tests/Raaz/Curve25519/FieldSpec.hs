@@ -3,6 +3,8 @@
 module Raaz.Curve25519.FieldSpec where
 
 
+import Data.List as List
+import Data.Bits
 import Data.Vector.Unboxed hiding (sum)
 import Foreign.Ptr (castPtr)
 import System.IO.Unsafe ( unsafePerformIO )
@@ -10,6 +12,7 @@ import System.IO.Unsafe ( unsafePerformIO )
 import Tests.Core
 import Raaz.KeyExchange.X25519.Internal
 import Raaz.Curve25519.Field
+import Raaz.Core.Types.Internal as TI
 import Raaz.Verse.Curve25519Test.C.Portable
 
 
@@ -22,6 +25,17 @@ storeLoadLimb = doit . toBits256
                                 peek ptr
 
 type Limbs = Tuple 10 Word64
+
+clearTopBit :: Limbs -> Limbs
+clearTopBit = TI.map (flip clearBit 63)
+
+propagate :: Limbs -> Limbs
+propagate lmbs = unsafePerformIO doit
+  where doit = allocaBuffer (sizeOf $ pure lmbs) $ runStoreLoad lmbs
+        runStoreLoad ls ptr = do poke ptr ls
+                                 verse_gf25519_propagate ptr
+                                 peek ptr
+
 type Packed = W256
 
 pos :: Int -> Int
@@ -31,6 +45,7 @@ pos n = 51 * q + 26 * r
 limbsToInteger :: Limbs -> Integer
 limbsToInteger lmb = sum [ w i | i <- [0..9] ]
   where w i   = toInteger (unsafeToVector lmb ! i) * 2^(pos i)
+
 
 limbsToGF :: Limbs -> GF
 limbsToGF = fromInteger . limbsToInteger
@@ -86,6 +101,16 @@ spec = do
   describe "load/store limbs" $ do
     prop "load followed by store should give the same value" $
       \ gf -> storeLoadLimb gf `shouldReturn` gf
+
+  describe "auxiliary operations" $ do
+    it "propagation for limbs will all but top bit being one " $
+      let ones = clearBit (complement (0 :: Word64)) 63
+          onesTup = unsafeFromList (List.replicate 10 ones) in
+        limbsToGF (propagate onesTup) `shouldBe` limbsToGF onesTup
+
+    prop "propagate should not change the field element" $ \ lmbs ->
+      let ls = clearTopBit lmbs in
+        limbsToGF (propagate ls) `shouldBe` limbsToGF ls
 
   describe "field arithmetic" $ do
     prop "addition" $ \ b c -> addition b c `shouldBe` (b + c)

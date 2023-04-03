@@ -6,6 +6,8 @@
 -- | Some common instances that are required by the test cases.
 module Tests.Core.Instances () where
 
+import GHC.TypeNats
+import Data.Vector.Unboxed as VU
 import Tests.Core.Imports
 
 import Raaz.Primitive.Poly1305.Internal as Poly1305
@@ -27,6 +29,12 @@ instance Arbitrary w => Arbitrary (BYTES w) where
 instance Arbitrary ByteString where
   arbitrary = pack <$> arbitrary
 
+instance (VU.Unbox a, KnownNat n, Arbitrary a) => Arbitrary (Tuple n a) where
+  arbitrary = gen
+    where gen = unsafeFromList <$> vector dim
+          dim = dimension $ getUndef gen
+          getUndef :: Gen (Tuple n a) -> Tuple n a
+          getUndef = undefined
 
 ---------------   Arbitrary instances for Hashes ----------------
 

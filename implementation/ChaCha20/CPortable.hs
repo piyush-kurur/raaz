@@ -57,7 +57,7 @@ xchacha20Setup (XNounce tup) mem = do
   initialise iv $ ivCell mem
   where keyPtr = castPtr $ keyCellPtr mem
         vec = unsafeToVector tup
-        wrd i = V.unsafeIndex vec i
+        wrd = V.unsafeIndex vec
         h0  = unLE $ wrd 0
         h1  = unLE $ wrd 1
         h2  = unLE $ wrd 2

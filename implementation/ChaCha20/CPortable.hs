@@ -7,7 +7,6 @@ import           Foreign.Ptr                ( castPtr )
 import qualified Data.Vector.Unboxed as V
 
 import           Raaz.Core
-import           Raaz.Core.Types.Internal
 import           Raaz.Primitive.ChaCha20.Internal
 import           Raaz.Verse.ChaCha20.C.Portable
 
@@ -57,7 +56,14 @@ xchacha20Setup (XNounce tup) mem = do
   -- from the hchacha20 hash. We also set the ivcell appropriately
   initialise iv $ ivCell mem
   where keyPtr = castPtr $ keyCellPtr mem
-        [LE h0,LE h1,LE h2, LE h3, h4, h5] = V.toList $ unsafeToVector tup
+        vec = unsafeToVector tup
+        wrd i = V.unsafeIndex vec i
+        h0  = unLE $ wrd 0
+        h1  = unLE $ wrd 1
+        h2  = unLE $ wrd 2
+        h3  = unLE $ wrd 3
+        h4  = wrd 4
+        h5  = wrd 5
         iv  = Nounce $ unsafeFromList [0, h4, h5] :: Nounce ChaCha20
 
 

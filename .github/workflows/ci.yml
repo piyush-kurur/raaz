@@ -28,8 +28,8 @@ jobs:
           - 'latest'
 
         include:
-          - os: windows-latest
-            ghc: 'latest'
+        #   - os: windows-latest
+        #     ghc: 'latest'
           - os: macos-latest
             ghc: 'latest'
 

@@ -239,7 +239,7 @@ by ghc.
 newtype LE w = LE { unLE :: w }
     deriving ( Bounded, Enum, Read, Show
              , Integral, Num, Real, Eq, Equality, Ord
-             , Bits, Storable, Typeable, NFData
+             , Bits, Storable, NFData
              )
 
 instance Functor LE where
@@ -249,7 +249,7 @@ instance Functor LE where
 newtype BE w = BE { unBE :: w }
     deriving ( Bounded, Enum, Read, Show
              , Integral, Num, Real, Eq, Equality, Ord
-             , Bits, Storable, Typeable, NFData
+             , Bits, Storable, NFData
              )
 
 instance Functor BE where

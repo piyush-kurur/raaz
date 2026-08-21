@@ -1,0 +1,43 @@
+name: Windows
+on:
+  push:
+  pull_request:
+  schedule:
+    # Daily build.
+    - cron: '42 8 * * *'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: 'Setup'
+        uses: haskell-actions/setup@v2
+        with:
+          ghc-version: latest
+          cabal-version: 'latest'
+      - name: Information
+        run: |
+          ghc --version
+          cabal --version
+
+      - name: Get the Repository
+        uses: actions/checkout@v4
+
+      - name: Submodules
+        run: git submodule update --init libverse
+
+      - name: Updating Cabal packages
+        run: |
+          cabal update
+
+      - name: Build
+        run: cabal build --minimize-conflict-set
+
+      - name: Test
+        run: cabal test
+
+      - name: Check
+        run: cabal check
+
+      - name: Raaz information
+        run: cabal run raaz -- info

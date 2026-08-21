@@ -7,7 +7,6 @@ import           Foreign.Ptr                ( castPtr )
 import qualified Data.Vector.Unboxed as V
 
 import           Raaz.Core
-import           Raaz.Core.Types.Internal
 import           Raaz.Primitive.ChaCha20.Internal
 import           Raaz.Verse.ChaCha20.C.Portable
 
@@ -65,7 +64,14 @@ xchacha20Setup (XNounce tup) mem = do
   -- the XChacha20 IV. When building the iv we need them as LE Word32
   -- and hence we do a simple h4, h4 match below.
   where keyPtr = castPtr $ keyCellPtr mem
-        [LE h0,LE h1,LE h2, LE h3, h4, h5] = V.toList $ unsafeToVector tup
+        vec = unsafeToVector tup
+        wrd = V.unsafeIndex vec
+        h0  = unLE $ wrd 0
+        h1  = unLE $ wrd 1
+        h2  = unLE $ wrd 2
+        h3  = unLE $ wrd 3
+        h4  = wrd 4
+        h5  = wrd 5
         iv  = Nounce $ unsafeFromList [0, h4, h5] :: Nounce ChaCha20
 
 

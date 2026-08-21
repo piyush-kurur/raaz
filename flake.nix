@@ -10,13 +10,13 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system:
       let pkgs = nixpkgs.legacyPackages.${system};
-          hpkgs = pkgs.haskell.packages.ghcHEAD;
+          compiler = pkgs.haskell.compiler.ghcHEAD;
        in
         {
           devShell = pkgs.mkShell {
             buildInputs = [ pkgs.editorconfig-checker
                             pkgs.zlib
-                            hpkgs.ghc
+                            compiler
                           ];
           };
         }

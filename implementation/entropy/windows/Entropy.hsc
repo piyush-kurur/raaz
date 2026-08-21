@@ -12,7 +12,7 @@ module Entropy( getEntropy, entropySource ) where
 ## error Unknown mingw32 arch
 ##endif
 
-import Foreign.Ptr (Ptr(), nullPtr, castPtr)
+import Foreign.Ptr (nullPtr, castPtr)
 import Foreign.Storable (peek)
 import Foreign.C.String (CWString())
 import Raaz.Core.Prelude

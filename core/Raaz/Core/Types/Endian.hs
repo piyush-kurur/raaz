@@ -3,7 +3,6 @@
 {-# LANGUAGE ForeignFunctionInterface   #-}
 {-# LANGUAGE FlexibleInstances          #-}
 
-
 -- | Endian safe types.
 module Raaz.Core.Types.Endian
        ( -- * Endianess aware types.
@@ -214,7 +213,6 @@ copyToBytes dest@(Dest dptr) src n =  memcpy dest  (castPtr <$> src) (sz src und
 
         sz     :: Storable w => Src (Ptr w) -> Proxy w -> BYTES Int
         sz _ w =  sizeOf w * toEnum n
-
 
 
 ---------------- The foreign function calls ----------------------

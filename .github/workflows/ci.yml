@@ -1,4 +1,4 @@
-name: Build
+name: Ubuntu
 on:
   push:
     branches: [ 'main' , 'master' , '0.3' ]
@@ -10,10 +10,9 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         ghc:
           # - '8.4'  (Haddock failure)
           # - '8.6'  (Haddock failure)
@@ -26,13 +25,8 @@ jobs:
           - '9.8'
           - '9.10'
           - '9.12'
+          - '9.14'
           - 'latest'
-
-        include:
-          - os: windows-latest
-            ghc: 'latest'
-          - os: macos-latest
-            ghc: 'latest'
 
     steps:
       - name: 'Setup'
@@ -75,7 +69,6 @@ jobs:
       #   run: cabal install
 
       - name: Build with tarball
-        if: matrix.os == 'ubuntu-latest'
         run: |
           cabal sdist
           mkdir tarball-build

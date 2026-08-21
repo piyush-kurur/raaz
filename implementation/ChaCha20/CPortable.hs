@@ -7,8 +7,10 @@ import           Foreign.Ptr                ( castPtr )
 import qualified Data.Vector.Unboxed as V
 
 import           Raaz.Core
+import           Raaz.Core.Types.Internal (unLE, forgetAlignment)
 import           Raaz.Primitive.ChaCha20.Internal
 import           Raaz.Verse.ChaCha20.C.Portable
+
 
 name :: String
 name = "libverse-c"

@@ -2,8 +2,10 @@ Raaz: A secure cryptographic library
 ====================================
 
 [![Apache-2.0 OR BSD-3-Clause][shields-license]](#legal)
-[![][ci-build]][github-actions]
-[![][ci-checks]][github-actions]
+[![][ci-checks]][github-actions-checks]
+[![][ci-ubuntu]][github-actions-ubuntu]
+[![][ci-windows]][github-actions-windows]
+[![][ci-macos]][github-actions-macos]
 [![Hackage][hackage-badge]][hackage]
 [![Hackage Dependencies][hackage-deps-badge]][hackage-deps]
 
@@ -78,8 +80,13 @@ LICENSE file.
 [hackage-deps-badge]: <https://img.shields.io/hackage-deps/v/raaz.svg>
 [hackage-deps]: <https://packdeps.haskellers.com/feed?needle=raaz>
 [shields-license]: <https://img.shields.io/badge/License-Apache--2.0%20OR%20BSD--3--Clause-informational.svg>
-[ci-build]: <https://github.com/raaz-crypto/raaz/workflows/Build/badge.svg> "Building source"
+[ci-ubuntu]: <https://github.com/raaz-crypto/raaz/workflows/Ubuntu/badge.svg> "Building source"
+[ci-macos]: <https://github.com/raaz-crypto/raaz/workflows/MacOS/badge.svg> "Building source"
+[ci-windows]:<https://github.com/raaz-crypto/raaz/workflows/Windows/badge.svg> "Building source"
 [ci-checks]: <https://github.com/raaz-crypto/raaz/workflows/Checks/badge.svg> "Source code checks"
-[github-actions]: <https://github.com/raaz-crypto/raaz/actions> "Github actions"
+[github-actions-macos]: <https://github.com/raaz-crypto/raaz/actions/workflows/macos.yml> "MacOS Workflow"
+[github-actions-windows]: <https://github.com/raaz-crypto/raaz/actions/workflows/windows.yml> "Windows Workflow"
+[github-actions-ubuntu]: <https://github.com/raaz-crypto/raaz/actions/workflows/ubuntu.yml> "Ubuntu Workflow"
+[github-actions-checks]: <https://github.com/raaz-crypto/raaz/actions/workflows/checks.yml> "Ubuntu Workflow"
 [doc-latest]: <https://hackage.haskell.org/package/raaz>
 [doc-candidate]: <https://hackage.haskell.org/package/raaz-0.3.0/candidate>
